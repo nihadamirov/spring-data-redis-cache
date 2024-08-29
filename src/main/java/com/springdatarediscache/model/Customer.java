@@ -1,12 +1,10 @@
 package com.springdatarediscache.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -23,4 +21,7 @@ public class Customer {
     private String lastName;
     private LocalDate dateOfBirth;
     private String email;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Account> account;
 }
