@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: spring-data-redis-cashe
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username:
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: true
+
+
+server:
+  port: 8808
+
