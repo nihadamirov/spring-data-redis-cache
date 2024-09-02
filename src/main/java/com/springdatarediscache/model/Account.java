@@ -20,7 +20,7 @@ public class Account {
     private String accountNumber;
     private BigDecimal balance;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 }

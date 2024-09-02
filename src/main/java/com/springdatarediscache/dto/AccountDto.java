@@ -11,5 +11,6 @@ public class AccountDto {
 
     private String accountNumber;
     private BigDecimal balance;
+    private CustomerDto customer;
 
 }
