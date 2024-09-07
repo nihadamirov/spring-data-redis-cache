@@ -6,13 +6,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
-public interface AccountMapper {
-    AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
+@Mapper(componentModel = "spring")
+public abstract class AccountMapper {
+    public static final AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
     @Mapping(source = "customer.id", target = "customerId")
-    AccountDto accountToAccountDto(Account account);
+    public abstract AccountDto accountToAccountDto(Account account);
 
     @Mapping(source = "customerId", target = "customer.id")
-    Account accountDtoToAccount(AccountDto accountDto);
+    public  abstract Account accountDtoToAccount(AccountDto accountDto);
 }

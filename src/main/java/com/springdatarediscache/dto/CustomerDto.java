@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Setter
 public class CustomerDto {
 
+    private Long id;
     private String name;
     private String lastName;
     private String email;

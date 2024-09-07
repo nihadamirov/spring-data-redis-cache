@@ -10,6 +10,7 @@ import com.springdatarediscache.repository.AccountRepository;
 import com.springdatarediscache.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 
@@ -19,7 +20,6 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
-    private final AccountMapper accountMapper = AccountMapper.INSTANCE;
 
     private final SecureRandom random = new SecureRandom();
     private final int ACCOUNT_NUMBER_LENGTH = 16;
@@ -29,11 +29,11 @@ public class AccountService {
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found with account number " + accountNumber));
 
-        return accountMapper.accountToAccountDto(account);
+        return AccountMapper.INSTANCE.accountToAccountDto(account);
     }
 
     public AccountDto createAccount(Long customerId, AccountDto accountDto) {
-        Account account = accountMapper.accountDtoToAccount(accountDto);
+        Account account = AccountMapper.INSTANCE.accountDtoToAccount(accountDto);
 
         Customer  customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer Id " + customerId + "not found"));
@@ -43,7 +43,7 @@ public class AccountService {
         account.setAccountNumber(generateRandomAccountNumber());
         Account savedAccount = accountRepository.save(account);
 
-        return accountMapper.accountToAccountDto(savedAccount);
+        return AccountMapper.INSTANCE.accountToAccountDto(savedAccount);
     }
 
     public String generateRandomAccountNumber() {

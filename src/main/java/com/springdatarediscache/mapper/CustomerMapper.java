@@ -5,13 +5,13 @@ import com.springdatarediscache.model.Customer;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CustomerMapper {
 
     CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
 
     Customer customerDtoToCustomer(CustomerDto customerDto);
 
-    CustomerDto customerToCustomerDto(Customer customer);
+   CustomerDto customerToCustomerDto(Customer customer);
 
 }
