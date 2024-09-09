@@ -10,9 +10,7 @@ import org.mapstruct.factory.Mappers;
 public abstract class AccountMapper {
     public static final AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
-    @Mapping(source = "customer.id", target = "customerId")
     public abstract AccountDto accountToAccountDto(Account account);
 
-    @Mapping(source = "customerId", target = "customer.id")
     public  abstract Account accountDtoToAccount(AccountDto accountDto);
 }

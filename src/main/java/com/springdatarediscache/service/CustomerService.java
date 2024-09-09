@@ -20,7 +20,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    @CacheEvict(value = {"customer", "customer_id"}, allEntries = true)
+    @CachePut(cacheNames= "customer", key = " 'createCustomer' + #id", unless = "#result == null")
     public CustomerDto createCustomer(CustomerDto customerDto) {
         Customer customer = CustomerMapper.INSTANCE.customerDtoToCustomer(customerDto);
         Customer savedCustomer = customerRepository.save(customer);
@@ -28,20 +28,18 @@ public class CustomerService {
         return CustomerMapper.INSTANCE.customerToCustomerDto(savedCustomer);
     }
 
-    @CachePut(cacheNames= "customer_id", key = " 'updateCustomer' + #customerDto.id", unless = "#result == null ")
+    @CachePut(cacheNames= "customer_id", key = " 'updateCustomer' + #id")
     public CustomerDto updateCustomer(Long id, CustomerDto customerDto) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer Id " + id + "not found"));
 
         customer.setName(customerDto.getName());
         customer.setLastName(customerDto.getLastName());
-        customer.setDateOfBirth(customerDto.getDateOfBirth());
-
         Customer updatedCustomer = customerRepository.save(customer);
         return CustomerMapper.INSTANCE.customerToCustomerDto(updatedCustomer);
     }
 
-    @Cacheable(cacheNames = "customer_id", key = "#root.methodName + #id", unless = "#result == null")
+    @Cacheable(cacheNames = "customer_id", key = "'getCustomerById' + #id", unless = "#result == null")
     public CustomerDto getCustomerById(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer Id " + id + "not found"));
@@ -49,7 +47,7 @@ public class CustomerService {
         return CustomerMapper.INSTANCE.customerToCustomerDto(customer);
     }
 
-    @Cacheable(value = "customer", key = "#root.methodName", unless = "#result == null")
+    @Cacheable(value = "customer", key = "'getallCustomer'", unless = "#result == null")
     public List<CustomerDto> getAllCustomer() {
         return customerRepository.findAll()
                 .stream()

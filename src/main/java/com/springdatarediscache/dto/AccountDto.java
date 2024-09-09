@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 @Setter
 public class AccountDto {
 
-    private String accountNumber;
     private BigDecimal balance;
     private CustomerDto customer;
 
