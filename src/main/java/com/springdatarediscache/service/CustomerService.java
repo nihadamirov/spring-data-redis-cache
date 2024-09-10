@@ -1,6 +1,7 @@
 package com.springdatarediscache.service;
 
-import com.springdatarediscache.dto.CustomerDto;
+import com.springdatarediscache.dto.request.CustomerRequestDto;
+import com.springdatarediscache.dto.response.CustomerResponseDto;
 import com.springdatarediscache.exception.CustomerNotFoundException;
 import com.springdatarediscache.mapper.CustomerMapper;
 import com.springdatarediscache.model.Customer;
@@ -20,38 +21,38 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    @CachePut(cacheNames= "customer", key = " 'createCustomer' + #id", unless = "#result == null")
-    public CustomerDto createCustomer(CustomerDto customerDto) {
-        Customer customer = CustomerMapper.INSTANCE.customerDtoToCustomer(customerDto);
+    @CachePut(cacheNames = "customer", key = " 'createCustomer' + #id", unless = "#result == null")
+    public CustomerResponseDto createCustomer(CustomerRequestDto customerDto) {
+        Customer customer = CustomerMapper.INSTANCE.requestDtoToCustomer(customerDto);
         Customer savedCustomer = customerRepository.save(customer);
 
-        return CustomerMapper.INSTANCE.customerToCustomerDto(savedCustomer);
+        return CustomerMapper.INSTANCE.customerToResponseDto(savedCustomer);
     }
 
-    @CachePut(cacheNames= "customer_id", key = " 'updateCustomer' + #id")
-    public CustomerDto updateCustomer(Long id, CustomerDto customerDto) {
+    @CachePut(cacheNames = "customer_id", key = " 'updateCustomer' + #id")
+    public CustomerResponseDto updateCustomer(Long id, CustomerRequestDto customerDto) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer Id " + id + "not found"));
 
-        customer.setName(customerDto.getName());
+        customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         Customer updatedCustomer = customerRepository.save(customer);
-        return CustomerMapper.INSTANCE.customerToCustomerDto(updatedCustomer);
+        return CustomerMapper.INSTANCE.customerToResponseDto(updatedCustomer);
     }
 
     @Cacheable(cacheNames = "customer_id", key = "'getCustomerById' + #id", unless = "#result == null")
-    public CustomerDto getCustomerById(Long id) {
+    public CustomerResponseDto getCustomerById(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer Id " + id + "not found"));
 
-        return CustomerMapper.INSTANCE.customerToCustomerDto(customer);
+        return CustomerMapper.INSTANCE.customerToResponseDto(customer);
     }
 
     @Cacheable(value = "customer", key = "'getallCustomer'", unless = "#result == null")
-    public List<CustomerDto> getAllCustomer() {
+    public List<CustomerResponseDto> getAllCustomer() {
         return customerRepository.findAll()
                 .stream()
-                .map(CustomerMapper.INSTANCE::customerToCustomerDto)
+                .map(CustomerMapper.INSTANCE::customerToResponseDto)
                 .collect(Collectors.toList());
     }
 
@@ -62,5 +63,4 @@ public class CustomerService {
 
         customerRepository.delete(customer);
     }
-
 }

@@ -1,4 +1,4 @@
-package com.springdatarediscache.dto;
+package com.springdatarediscache.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,9 +7,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class AccountDto {
+public class AccountRequestDto {
 
     private BigDecimal balance;
-    private CustomerDto customer;
-
 }

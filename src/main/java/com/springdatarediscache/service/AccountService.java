@@ -1,6 +1,7 @@
 package com.springdatarediscache.service;
 
-import com.springdatarediscache.dto.AccountDto;
+import com.springdatarediscache.dto.request.AccountRequestDto;
+import com.springdatarediscache.dto.response.AccountResponseDto;
 import com.springdatarediscache.exception.AccountNotFoundException;
 import com.springdatarediscache.exception.CustomerNotFoundException;
 import com.springdatarediscache.mapper.AccountMapper;
@@ -10,7 +11,6 @@ import com.springdatarediscache.repository.AccountRepository;
 import com.springdatarediscache.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 
@@ -24,18 +24,18 @@ public class AccountService {
     private final SecureRandom random = new SecureRandom();
     private final int ACCOUNT_NUMBER_LENGTH = 16;
 
-    public AccountDto getAccountByAccountNumber(String accountNumber) {
+    public AccountResponseDto getAccountByAccountNumber(String accountNumber) {
 
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found with account number " + accountNumber));
 
-        return AccountMapper.INSTANCE.accountToAccountDto(account);
+        return AccountMapper.INSTANCE.accountToResponseDto(account);
     }
 
-    public AccountDto createAccount(Long customerId, AccountDto accountDto) {
-        Account account = AccountMapper.INSTANCE.accountDtoToAccount(accountDto);
+    public AccountResponseDto createAccount(Long customerId, AccountRequestDto accountDto) {
+        Account account = AccountMapper.INSTANCE.requestDtoToAccount(accountDto);
 
-        Customer  customer = customerRepository.findById(customerId)
+        Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer Id " + customerId + "not found"));
 
         account.setCustomer(customer);
@@ -43,15 +43,17 @@ public class AccountService {
         account.setAccountNumber(generateRandomAccountNumber());
         Account savedAccount = accountRepository.save(account);
 
-        return AccountMapper.INSTANCE.accountToAccountDto(savedAccount);
+        return AccountMapper.INSTANCE.accountToResponseDto(savedAccount);
     }
 
     public String generateRandomAccountNumber() {
+        SecureRandom random = new SecureRandom();
+        StringBuilder accountNumber = new StringBuilder(16);
+        accountNumber.append('4');
 
-        //generating 16 random numbers between 0 - 9
-        return random.ints(ACCOUNT_NUMBER_LENGTH, 0, 16)
-                .mapToObj(String::valueOf)
-                .reduce(String::concat)
-                .orElseThrow();
+        for (int i = 1; i < ACCOUNT_NUMBER_LENGTH; i++) {
+            accountNumber.append(random.nextInt(10));
+        }
+        return accountNumber.toString();
     }
 }

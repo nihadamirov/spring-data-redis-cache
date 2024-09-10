@@ -1,6 +1,7 @@
 package com.springdatarediscache.controller;
 
-import com.springdatarediscache.dto.AccountDto;
+import com.springdatarediscache.dto.request.AccountRequestDto;
+import com.springdatarediscache.dto.response.AccountResponseDto;
 import com.springdatarediscache.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,17 +16,16 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping("/create/{customerId}")
-    public ResponseEntity<AccountDto> createAccount(@PathVariable Long customerId, @RequestBody AccountDto accountDto) {
-        AccountDto createAccount = accountService.createAccount(customerId, accountDto);
+    public ResponseEntity<AccountResponseDto> createAccount(@PathVariable Long customerId, @RequestBody AccountRequestDto accountDto) {
+        AccountResponseDto createAccount = accountService.createAccount(customerId, accountDto);
 
         return new ResponseEntity<>(createAccount, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<AccountDto> getAccountByAccountNumber(@RequestBody String accountNumber) {
-        AccountDto accountDto = accountService.getAccountByAccountNumber(accountNumber);
+    public ResponseEntity<AccountResponseDto> getAccountByAccountNumber(@RequestParam String accountNumber) {
+        AccountResponseDto accountDto = accountService.getAccountByAccountNumber(accountNumber);
         return new ResponseEntity<>(accountDto, HttpStatus.OK);
 
     }
-
 }

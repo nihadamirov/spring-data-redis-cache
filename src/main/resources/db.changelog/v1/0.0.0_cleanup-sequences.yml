@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: cleanup-sequences
+      author: Nihad Amirov
+      changes:
+#        - dropSequence:
+#            sequenceName: CUSTOMER_SEQ
+#        - dropSequence:
+#            sequenceName: ACCOUNT_SEQ

@@ -1,6 +1,7 @@
 package com.springdatarediscache.mapper;
 
-import com.springdatarediscache.dto.CustomerDto;
+import com.springdatarediscache.dto.request.CustomerRequestDto;
+import com.springdatarediscache.dto.response.CustomerResponseDto;
 import com.springdatarediscache.model.Customer;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -13,8 +14,7 @@ public abstract class CustomerMapper {
 
     public static final CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
 
-    public abstract Customer customerDtoToCustomer(CustomerDto customerDto);
-
-   public abstract CustomerDto customerToCustomerDto(Customer customer);
+    public abstract Customer requestDtoToCustomer(CustomerRequestDto customerRequestDto);
+   public abstract CustomerResponseDto customerToResponseDto(Customer customer);
 
 }

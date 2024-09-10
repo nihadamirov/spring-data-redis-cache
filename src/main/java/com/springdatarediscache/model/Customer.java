@@ -1,9 +1,11 @@
 package com.springdatarediscache.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -19,11 +21,12 @@ public class Customer {
     @SequenceGenerator(name = "customer_seq_gen", sequenceName = "CUSTOMER_SEQ", allocationSize = 1)
     private Long id;
 
-    private String name;
+    private String firstName;
     private String lastName;
+    private int age;
     private String email;
+    private String phone;
 
     @OneToMany(mappedBy = "customer")
     private List<Account> account;
-
 }
